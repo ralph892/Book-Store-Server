@@ -11,12 +11,56 @@ export class UsersService {
     private usersRepository: Repository<Users>,
   ) {}
 
-  createUser(createUserDto: CreateUserDto): Promise<Users> {
+  async createUser(createUserDto: CreateUserDto) {
     try {
       const newUser = this.usersRepository.create(createUserDto);
       return this.usersRepository.save(newUser);
     } catch (error) {
-      throw new Error('lack of user information');
+      throw new Error('Failed to create new user');
+    }
+  }
+
+  async getUsers(search: string | undefined) {
+    try {
+      if (search) {
+        const searchUsers = this.usersRepository.query(
+          'SELECT * FROM users WHERE username LIKE ? ',
+          [`${search}%`],
+        );
+        return searchUsers;
+      }
+      const allUsers = this.usersRepository.find({});
+      return allUsers;
+    } catch (error) {
+      throw new Error('failed to request users');
+    }
+  }
+
+  async getOneUser(id: string) {
+    try {
+      if (id != undefined) {
+        const user = this.usersRepository.query(
+          'SELECT * FROM users WHERE user_id = ?',
+          [id],
+        );
+        return user;
+      }
+    } catch (error) {
+      throw new Error('failed to request a user');
+    }
+  }
+
+  async deleteUser(id: string) {
+    try {
+      if (id != undefined) {
+        const response = this.usersRepository.query(
+          'DELETE FROM users WHERE user_id = ?',
+          [id],
+        );
+        return response;
+      }
+    } catch (error) {
+      throw new Error('failed to request to delete a user');
     }
   }
 }
