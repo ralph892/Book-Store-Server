@@ -29,13 +29,12 @@ export class UsersController {
   // POST /users
   @Post()
   createUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto);
     return this.usersService.createUser(createUserDto);
   }
 
   // DELETE /users/:id
   @Delete(':id')
   deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteUser(id);
+    return this.usersService.remove(id);
   }
 }

@@ -50,7 +50,7 @@ export class UsersService {
     }
   }
 
-  async deleteUser(id: string) {
+  async remove(id: string) {
     try {
       if (id != undefined) {
         const response = this.usersRepository.query(
@@ -60,7 +60,7 @@ export class UsersService {
         return response;
       }
     } catch (error) {
-      throw new Error('failed to request to delete a user');
+      throw new Error(error.message);
     }
   }
 }

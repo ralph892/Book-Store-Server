@@ -5,10 +5,13 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Users } from './users/users.entity';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entities/category.entity';
+import { BooksModule } from './books/books.module';
+import { Book } from './books/entities/book.entity';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -16,9 +19,12 @@ import { Users } from './users/users.entity';
       username: 'root',
       password: '892002',
       database: 'bookstoredb',
-      entities: [Users],
+      entities: [Users, Category, Book],
       synchronize: true,
     }),
+    UsersModule,
+    CategoriesModule,
+    BooksModule,
   ],
   controllers: [AppController],
   providers: [AppService],
