@@ -4,11 +4,13 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Users } from './users/users.entity';
+import { Users } from './users/entities/users.entity';
 import { CategoriesModule } from './categories/categories.module';
 import { Category } from './categories/entities/category.entity';
 import { BooksModule } from './books/books.module';
 import { Book } from './books/entities/book.entity';
+import { CartsModule } from './carts/carts.module';
+import { Cart } from './carts/entities/cart.entity';
 
 @Module({
   imports: [
@@ -19,12 +21,13 @@ import { Book } from './books/entities/book.entity';
       username: 'root',
       password: '892002',
       database: 'bookstoredb',
-      entities: [Users, Category, Book],
+      entities: [Users, Category, Book, Cart],
       synchronize: true,
     }),
     UsersModule,
     CategoriesModule,
     BooksModule,
+    CartsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

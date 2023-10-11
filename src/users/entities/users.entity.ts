@@ -1,5 +1,6 @@
 import { IsEmail, IsNumber, Max, Min } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Cart } from 'src/carts/entities/cart.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class Users {
@@ -52,4 +53,7 @@ export class Users {
 
   @Column({ default: '' })
   avatar: string;
+
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts: Cart[];
 }

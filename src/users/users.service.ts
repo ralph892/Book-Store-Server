@@ -1,26 +1,50 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Users } from './users.entity';
+import { Users } from './entities/users.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { storage } from 'src/config/firebase.config';
 
 @Injectable()
 export class UsersService {
+  url: string;
   constructor(
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     try {
       const newUser = this.usersRepository.create(createUserDto);
+      if (this.url !== '') newUser.avatar = this.url;
       return this.usersRepository.save(newUser);
     } catch (error) {
       throw new Error('Failed to create new user');
     }
   }
 
-  async getUsers(search: string | undefined) {
+  async upload(file: Express.Multer.File) {
+    try {
+      if (file) {
+        const fileRef = ref(storage, `images/users/${file.originalname}`);
+        const metadata = {
+          contentType: file.mimetype,
+        };
+        try {
+          if (await getDownloadURL(fileRef))
+            throw new Error('This file already exists');
+        } catch (error) {
+          await uploadBytes(fileRef, file.buffer, metadata);
+          this.url = await getDownloadURL(fileRef);
+        }
+      }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async findAll(search: string | undefined) {
     try {
       if (search) {
         const searchUsers = this.usersRepository.query(
@@ -36,7 +60,7 @@ export class UsersService {
     }
   }
 
-  async getOneUser(id: string) {
+  async findOne(id: string) {
     try {
       if (id != undefined) {
         const user = this.usersRepository.query(

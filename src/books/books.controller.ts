@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('books')
 export class BooksController {
@@ -19,6 +22,12 @@ export class BooksController {
   @Post()
   create(@Body() createBookDto: CreateBookDto) {
     return this.booksService.create(createBookDto);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('imageFile'))
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.booksService.upload(file);
   }
 
   @Get()

@@ -1,6 +1,6 @@
 import { Max, Min } from 'class-validator';
 import { Category } from 'src/categories/entities/category.entity';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Book {
@@ -14,6 +14,7 @@ export class Book {
   @Column({
     name: 'title',
     nullable: false,
+    unique: true,
   })
   title: string;
 
@@ -68,6 +69,7 @@ export class Book {
   })
   description: string;
 
-  @ManyToOne(() => Category, (category) => category.category_id)
+  @ManyToOne(() => Category, (category) => category.books)
+  @JoinColumn({ name: 'category' })
   category: Category;
 }
