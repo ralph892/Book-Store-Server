@@ -63,6 +63,14 @@ export class BooksService {
     }
   }
 
+  async countAll() {
+    try {
+      return this.booksRepository.count();
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   async findOne(id: string) {
     try {
       if (id != undefined) {

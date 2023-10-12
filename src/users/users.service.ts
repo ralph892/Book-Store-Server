@@ -56,7 +56,15 @@ export class UsersService {
       const allUsers = this.usersRepository.find({});
       return allUsers;
     } catch (error) {
-      throw new Error('failed to request users');
+      throw new Error(error.message);
+    }
+  }
+
+  async countAll() {
+    try {
+      return this.usersRepository.count();
+    } catch (error) {
+      throw new Error(error.message);
     }
   }
 
