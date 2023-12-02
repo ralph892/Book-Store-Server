@@ -21,6 +21,7 @@ export class BooksController {
 
   @Post()
   create(@Body() createBookDto: CreateBookDto) {
+    console.log(createBookDto);
     return this.booksService.create(createBookDto);
   }
 
@@ -31,13 +32,22 @@ export class BooksController {
   }
 
   @Get()
-  findAll(@Query('search') search?: string) {
-    return this.booksService.findAll(search);
+  findAll(
+    @Query('search') search?: string,
+    @Query('category') category?: string,
+    @Query('limit') limit?: number,
+  ) {
+    return this.booksService.findAll(search, category, limit);
   }
 
-  @Get('/count')
+  @Get('count')
   countAll() {
     return this.booksService.countAll();
+  }
+
+  @Get('new')
+  findNew(@Query('limit') limit?: number) {
+    return this.booksService.findNew(limit);
   }
 
   @Get(':id')

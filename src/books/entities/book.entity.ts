@@ -65,6 +65,8 @@ export class Book {
 
   @Column({
     name: 'description',
+    type: 'varchar',
+    length: 999,
     default: '',
   })
   description: string;

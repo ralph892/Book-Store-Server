@@ -46,12 +46,24 @@ export class BooksService {
     }
   }
 
-  async findAll(search: string | undefined) {
+  async findAll(search: string | undefined, category?: string, limit?: number) {
     try {
       if (search) {
         const searchBook = this.booksRepository.query(
           'SELECT * FROM book WHERE title LIKE ? ',
           [`${search}%`],
+        );
+        return searchBook;
+      } else if (category && !limit) {
+        const searchBook = this.booksRepository.query(
+          'SELECT * FROM book, category WHERE category.category_name = ? AND book.category = category.category_id',
+          [category],
+        );
+        return searchBook;
+      } else if (category && limit) {
+        const searchBook = this.booksRepository.query(
+          `SELECT * FROM book, category WHERE category.category_name = ? AND book.category = category.category_id LIMIT ${limit}`,
+          [category],
         );
         return searchBook;
       }
@@ -80,6 +92,23 @@ export class BooksService {
         );
         return book;
       }
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  async findNew(limit?: number) {
+    try {
+      if (limit) {
+        const searchBooks = this.booksRepository.query(
+          `SELECT * FROM book, category WHERE book.category = category.category_id ORDER BY book.published_date DESC LIMIT ${limit}`,
+        );
+        return searchBooks;
+      }
+      const searchBooks = this.booksRepository.query(
+        `SELECT * FROM book, category WHERE book.category = category.category_id ORDER BY book.published_date DESC`,
+      );
+      return searchBooks;
     } catch (error) {
       throw new Error(error.message);
     }

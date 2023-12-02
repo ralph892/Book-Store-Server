@@ -11,7 +11,8 @@ import { BooksModule } from './books/books.module';
 import { Book } from './books/entities/book.entity';
 import { CartsModule } from './carts/carts.module';
 import { Cart } from './carts/entities/cart.entity';
-
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -24,10 +25,14 @@ import { Cart } from './carts/entities/cart.entity';
       entities: [Users, Category, Book, Cart],
       synchronize: true,
     }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     UsersModule,
     CategoriesModule,
     BooksModule,
     CartsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

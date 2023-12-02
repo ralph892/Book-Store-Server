@@ -1,21 +1,14 @@
 import { IsEmail, IsNumber, Max, Min } from 'class-validator';
 import { Cart } from 'src/carts/entities/cart.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Users {
-  @PrimaryGeneratedColumn({
-    type: 'bigint',
+  @PrimaryColumn({
     name: 'user_id',
+    type: 'varchar',
   })
-  id: number;
-
-  @Column({
-    name: 'username',
-    nullable: false,
-    unique: true,
-  })
-  username: string;
+  user_id: string;
 
   @Column({
     name: 'password',
@@ -51,8 +44,11 @@ export class Users {
   })
   email: string;
 
-  @Column({ default: '' })
-  avatar: string;
+  @Column({
+    name: 'refreshToken',
+    nullable: true,
+  })
+  refreshToken: string;
 
   @OneToMany(() => Cart, (cart) => cart.user)
   carts: Cart[];
