@@ -1,16 +1,24 @@
-import { IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsNotEmpty, Min } from 'class-validator';
+import { CreateBookDto } from 'src/books/dto/create-book.dto';
 export class CreateCartDto {
   @IsNotEmpty()
-  id_card: string;
+  cart_id: string;
+
+  user_id: string;
 
   @IsNotEmpty()
-  user: string;
+  date: Date;
 
-  @IsNumber()
-  @Min(0)
-  quantity: number;
+  @IsNotEmpty({
+    each: true,
+  })
+  @Min(1, {
+    each: true,
+  })
+  buyQuantities: number[];
 
-  @IsNumber()
-  @Min(0)
-  total_price: number;
+  @IsNotEmpty({
+    each: true,
+  })
+  products: CreateBookDto[];
 }

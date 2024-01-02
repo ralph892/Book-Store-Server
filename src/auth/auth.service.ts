@@ -120,7 +120,6 @@ export class AuthService {
       refreshToken,
       user[0].refreshToken,
     );
-    console.log(refreshTokenMatches);
     if (!refreshTokenMatches) throw new ForbiddenException('Access Denied');
     return user;
   }

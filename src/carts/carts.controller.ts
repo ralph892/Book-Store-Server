@@ -6,18 +6,34 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { CartsService } from './carts.service';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
+import { Request } from 'express';
 
 @Controller('carts')
 export class CartsController {
   constructor(private readonly cartsService: CartsService) {}
 
+  @UseGuards(AccessTokenGuard)
   @Post()
-  create(@Body() createCartDto: CreateCartDto) {
-    return this.cartsService.create(createCartDto);
+  async create(@Body() createCartDto: CreateCartDto, @Req() req: Request) {
+    createCartDto.user_id = req.user['sub'];
+    try {
+      const response = await this.cartsService.create(createCartDto);
+      if (response instanceof Error) {
+        throw new Error(response.message);
+      }
+      return response;
+    } catch (error) {
+      return {
+        error: error.message,
+      };
+    }
   }
 
   @Get()

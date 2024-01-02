@@ -1,6 +1,14 @@
 import { Max, Min } from 'class-validator';
+import { BookToCart } from 'src/book-to-cart/entities/book-to-cart.entity';
 import { Category } from 'src/categories/entities/category.entity';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity()
 export class Book {
@@ -74,4 +82,7 @@ export class Book {
   @ManyToOne(() => Category, (category) => category.books)
   @JoinColumn({ name: 'category' })
   category: Category;
+
+  @OneToMany(() => BookToCart, (bookToCart) => bookToCart.book)
+  bookToCarts: BookToCart[];
 }

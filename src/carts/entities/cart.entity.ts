@@ -1,13 +1,11 @@
-import { IsNumber, Min } from 'class-validator';
-import { Book } from 'src/books/entities/book.entity';
+import { BookToCart } from 'src/book-to-cart/entities/book-to-cart.entity';
 import { Users } from 'src/users/entities/users.entity';
 import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryColumn,
 } from 'typeorm';
 
@@ -21,28 +19,12 @@ export class Cart {
   cart_id: string;
 
   @Column()
-  @IsNumber()
-  @Min(0)
-  quantity: number;
-
-  @Column()
-  @IsNumber()
-  @Min(0)
-  total: number;
+  date: Date;
 
   @ManyToOne(() => Users, (user) => user.carts)
-  @JoinColumn({ name: 'user' })
-  user: string;
+  @JoinColumn({ name: 'user_id' })
+  user_id: string;
 
-  @ManyToMany(() => Book)
-  @JoinTable({
-    name: 'books_carts',
-    joinColumn: {
-      name: 'cart_id',
-    },
-    inverseJoinColumn: {
-      name: 'book_id',
-    },
-  })
-  books: Book[];
+  @OneToMany(() => BookToCart, (bookToCart) => bookToCart.cart)
+  bookToCarts: BookToCart[];
 }

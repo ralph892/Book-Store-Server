@@ -126,6 +126,19 @@ export class BooksService {
     }
   }
 
+  async updateQuantity(id: string, quantity: number) {
+    try {
+      if (id && quantity >= 0) {
+        const response = await this.booksRepository.update(id, {
+          quantity: quantity,
+        });
+        return response;
+      }
+    } catch (error) {
+      return new Error(error.message);
+    }
+  }
+
   remove(id: string) {
     try {
       if (id != undefined) {

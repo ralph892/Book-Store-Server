@@ -50,6 +50,6 @@ export class Users {
   })
   refreshToken: string;
 
-  @OneToMany(() => Cart, (cart) => cart.user)
+  @OneToMany(() => Cart, (cart) => cart.user_id)
   carts: Cart[];
 }

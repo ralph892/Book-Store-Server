@@ -13,6 +13,8 @@ import { CartsModule } from './carts/carts.module';
 import { Cart } from './carts/entities/cart.entity';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { BookToCartModule } from './book-to-cart/book-to-cart.module';
+import { BookToCart } from './book-to-cart/entities/book-to-cart.entity';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -22,7 +24,7 @@ import { ConfigModule } from '@nestjs/config';
       username: 'root',
       password: '892002',
       database: 'bookstoredb',
-      entities: [Users, Category, Book, Cart],
+      entities: [Users, Category, Book, Cart, BookToCart],
       synchronize: true,
     }),
     ConfigModule.forRoot({
@@ -33,6 +35,7 @@ import { ConfigModule } from '@nestjs/config';
     BooksModule,
     CartsModule,
     AuthModule,
+    BookToCartModule,
   ],
   controllers: [AppController],
   providers: [AppService],
